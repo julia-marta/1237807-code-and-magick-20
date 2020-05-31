@@ -108,16 +108,13 @@ window.renderStatistics = function (ctx, players, times) {
 
   for (var i = 0; i < players.length; i++) {
     var barHeight = (BAR_HEIGHT * times[i]) / maxTime;
+    var barX = CENTER_GAP + (BAR_WIDTH + BAR_GAP) * i;
+    var barY = (BAR_HEIGHT - barHeight) + TOP_GAP;
 
-    renderText(ctx, Math.round(times[i]), CENTER_GAP + (BAR_WIDTH + BAR_GAP) * i, (BAR_HEIGHT - barHeight) + TOP_GAP + FONT_GAP * 2);
-    renderText(ctx, players[i], CENTER_GAP + (BAR_WIDTH + BAR_GAP) * i, BOTTOM_GAP);
+    renderText(ctx, Math.round(times[i]), barX, barY + FONT_GAP * 2);
+    renderText(ctx, players[i], barX, BOTTOM_GAP);
 
-    if (players[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    } else {
-      ctx.fillStyle = getRandomColor();
-    }
-
-    ctx.fillRect(CENTER_GAP + (BAR_WIDTH + BAR_GAP) * i, (BAR_HEIGHT - barHeight) + TOP_GAP + FONT_GAP * 3, BAR_WIDTH, barHeight);
+    ctx.fillStyle = (players[i] === 'Вы') ? 'rgba(255, 0, 0, 1)' : getRandomColor();
+    ctx.fillRect(barX, barY + FONT_GAP * 3, BAR_WIDTH, barHeight);
   }
 };
