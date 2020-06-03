@@ -20,54 +20,62 @@ var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color || '#fff';
   ctx.beginPath();
   ctx.moveTo(x, y);
-  ctx.lineTo(x + 125, y);
-  ctx.lineTo(x + 125, y + 20);
-  ctx.lineTo(x + 150, y + 20);
-  ctx.lineTo(x + 150, y + 40);
-  ctx.lineTo(x + 275, y + 40);
-  ctx.lineTo(x + 275, y + 20);
-  ctx.lineTo(x + 300, y + 20);
-  ctx.lineTo(x + 300, y);
-  ctx.lineTo(x + 425, y);
-  ctx.lineTo(x + 425, y + 20);
-  ctx.lineTo(x + 450, y + 20);
-  ctx.lineTo(x + 450, y + 40);
-  ctx.lineTo(x + 475, y + 40);
-  ctx.lineTo(x + 475, y + 60);
-  ctx.lineTo(x + 500, y + 60);
-  ctx.lineTo(x + 500, y + 140);
-  ctx.lineTo(x + 475, y + 140);
-  ctx.lineTo(x + 475, y + 175);
-  ctx.lineTo(x + 450, y + 175);
-  ctx.lineTo(x + 450, y + 195);
-  ctx.lineTo(x + 425, y + 195);
-  ctx.lineTo(x + 425, y + 215);
-  ctx.lineTo(x + 400, y + 215);
-  ctx.lineTo(x + 400, y + 235);
-  ctx.lineTo(x + 375, y + 235);
-  ctx.lineTo(x + 375, y + 255);
-  ctx.lineTo(x + 325, y + 255);
-  ctx.lineTo(x + 325, y + 275);
-  ctx.lineTo(x + 100, y + 275);
-  ctx.lineTo(x + 100, y + 255);
-  ctx.lineTo(x + 50, y + 255);
-  ctx.lineTo(x + 50, y + 235);
-  ctx.lineTo(x + 25, y + 235);
-  ctx.lineTo(x + 25, y + 215);
-  ctx.lineTo(x, y + 215);
-  ctx.lineTo(x, y + 195);
-  ctx.lineTo(x - 25, y + 195);
-  ctx.lineTo(x - 25, y + 175);
-  ctx.lineTo(x - 50, y + 175);
-  ctx.lineTo(x - 50, y + 140);
-  ctx.lineTo(x - 75, y + 140);
-  ctx.lineTo(x - 75, y + 60);
-  ctx.lineTo(x - 50, y + 60);
-  ctx.lineTo(x - 50, y + 40);
-  ctx.lineTo(x - 25, y + 40);
-  ctx.lineTo(x - 25, y + 20);
-  ctx.lineTo(x, y + 20);
-  ctx.lineTo(x, y);
+
+  var cloudSteps = [
+    {x: 125, y: 0},
+    {x: 125, y: 20},
+    {x: 150, y: 20},
+    {x: 150, y: 40},
+    {x: 275, y: 40},
+    {x: 275, y: 20},
+    {x: 300, y: 20},
+    {x: 300, y: 0},
+    {x: 425, y: 0},
+    {x: 425, y: 20},
+    {x: 450, y: 20},
+    {x: 450, y: 40},
+    {x: 475, y: 40},
+    {x: 475, y: 60},
+    {x: 500, y: 60},
+    {x: 500, y: 140},
+    {x: 475, y: 140},
+    {x: 475, y: 175},
+    {x: 450, y: 175},
+    {x: 450, y: 195},
+    {x: 425, y: 195},
+    {x: 425, y: 215},
+    {x: 400, y: 215},
+    {x: 400, y: 235},
+    {x: 375, y: 235},
+    {x: 375, y: 255},
+    {x: 325, y: 255},
+    {x: 325, y: 275},
+    {x: 100, y: 275},
+    {x: 100, y: 255},
+    {x: 50, y: 255},
+    {x: 50, y: 235},
+    {x: 25, y: 235},
+    {x: 25, y: 215},
+    {x: 0, y: 215},
+    {x: 0, y: 195},
+    {x: -25, y: 195},
+    {x: -25, y: 175},
+    {x: -50, y: 175},
+    {x: -50, y: 140},
+    {x: -75, y: 140},
+    {x: -75, y: 60},
+    {x: -50, y: 60},
+    {x: -50, y: 40},
+    {x: -25, y: 40},
+    {x: -25, y: 20},
+    {x: 0, y: 20},
+    {x: 0, y: 0}
+  ];
+
+  for (var i = 0; i < cloudSteps.length; i++) {
+    ctx.lineTo(x + cloudSteps[i].x, y + cloudSteps[i].y);
+  }
+
   ctx.closePath();
   ctx.stroke();
   ctx.fill();
