@@ -1,6 +1,8 @@
 'use strict';
 
 var WIZARDS_COUNT = 4;
+var ENTER_KEY = 'Enter';
+var ESC_KEY = 'Escape';
 
 var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
@@ -53,8 +55,8 @@ var changeColor = function (arr, parameter, input) {
 // обработчик закрытия окна по нажатию на Esc
 
 var onPopupEscPress = function (evt) {
-  evt.preventDefault();
-  if (evt.key === 'Escape') {
+  if (evt.key === ESC_KEY && !evt.target.classList.contains('setup-user-name')) {
+    evt.preventDefault();
     closePopup();
   }
 };
@@ -84,7 +86,7 @@ setupOpen.addEventListener('click', function () {
 // обработчик нажатия на Enter на аватарке
 
 setupOpen.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Enter') {
+  if (evt.key === ENTER_KEY) {
     openPopup();
   }
 });
@@ -101,27 +103,9 @@ if (userSetup) {
 
 if (userSetup) {
   setupClose.addEventListener('keydown', function (evt) {
-    if (evt.key === 'Enter') {
+    if (evt.key === ENTER_KEY) {
       closePopup();
     }
-  });
-}
-
-// обработчик фокуса на поле ввода
-
-if (userSetup) {
-  userNameInput.addEventListener('focus', function () {
-
-    document.removeEventListener('keydown', onPopupEscPress);
-  });
-}
-
-//  обработчик снятия фокуса с поля ввода
-
-if (userSetup) {
-  userNameInput.addEventListener('blur', function () {
-
-    document.addEventListener('keydown', onPopupEscPress);
   });
 }
 
@@ -138,7 +122,7 @@ if (userSetup && userNameInput.valid) {
 
 if (userSetup && userNameInput.valid) {
   userSubmit.addEventListener('keydown', function (evt) {
-    if (evt.key === 'Enter') {
+    if (evt.key === ENTER_KEY) {
       evt.preventDefault();
       userForm.submit();
     }
@@ -175,7 +159,6 @@ var getWizards = function () {
       eyesColor: getRandomData(EYES_COLORS)
     });
   }
-
 };
 
 // создание массива с данными магов
