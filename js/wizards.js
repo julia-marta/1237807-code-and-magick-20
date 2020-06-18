@@ -31,26 +31,23 @@
     var wizardElement = similarWizardTemplate.cloneNode(true);
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
 
     return wizardElement;
   };
 
-  // функция отрисовки магов на странице
-  var createWizards = function (arr) {
+  // успешное получение данных: отрисовка и показ 4-х случайных похожих магов на странице
+  var onSuccessLoad = function (wizardsArray) {
+    var randomWizards = window.util.shuffleArray(wizardsArray).slice(0, WIZARDS_COUNT);
     var wizardsFragment = document.createDocumentFragment();
-    for (var i = 0; i < arr.length; i++) {
-      wizardsFragment.appendChild(renderWizard(arr[i]));
+    for (var i = 0; i < randomWizards.length; i++) {
+      wizardsFragment.appendChild(renderWizard(randomWizards[i]));
     }
-
-    return similarList.appendChild(wizardsFragment);
+    window.dialog.userSetup.querySelector('.setup-similar').classList.remove('hidden');
+    similarList.appendChild(wizardsFragment);
   };
 
-  // отрисовка магов в список похожих магов
-  createWizards(wizards);
-
-  // показ списка похожих магов
-  window.dialog.userSetup.querySelector('.setup-similar').classList.remove('hidden');
-
+  // загрузка с сервера массива с похожими магами и обработка данных
+  window.backend.load(onSuccessLoad, window.setup.onError);
 })();

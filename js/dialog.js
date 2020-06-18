@@ -10,10 +10,6 @@
     y: userSetup.style.top
   };
 
-  window.dialog = {
-    userSetup: userSetup
-  };
-
   // обработчик закрытия окна по нажатию на Esc, если инпут не в фокусе
   var onPopupEscPress = function (evt) {
     if (!evt.target.classList.contains('setup-user-name')) {
@@ -58,4 +54,8 @@
       window.util.isEnterEvent(evt, closePopup);
     });
   }
+
+  window.dialog = {
+    userSetup: userSetup
+  };
 })();
