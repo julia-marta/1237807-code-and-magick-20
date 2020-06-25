@@ -2,17 +2,7 @@
 
 (function () {
   var userForm = window.dialog.userSetup.querySelector('.setup-wizard-form');
-  var setupWizard = window.dialog.userSetup.querySelector('.setup-wizard');
-  var wizardCoat = setupWizard.querySelector('.wizard-coat');
-  var wizardEyes = setupWizard.querySelector('.wizard-eyes');
-  var wizardFireball = window.dialog.userSetup.querySelector('.setup-fireball-wrap');
-  var coatColorInput = window.dialog.userSetup.querySelector('input[name=coat-color]');
-  var eyesColorInput = window.dialog.userSetup.querySelector('input[name=eyes-color]');
-  var fireballColorInput = window.dialog.userSetup.querySelector('input[name=fireball-color]');
-
-  var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
-  var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-  var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+  var wizards = [];
 
   // ошибка при получении или отправке данных: добавление сообщения об ошибке на страницу
   var onError = function (errorMessage) {
@@ -53,7 +43,7 @@
     document.body.insertAdjacentElement('afterbegin', message);
   };
 
-  // функция отправки данных формы на сервер
+  // отправка данных формы на сервер и обработка результата
   var onSubmitForm = function (evt) {
     window.backend.save(new FormData(userForm), onSuccessSubmit, onError);
     evt.preventDefault();
@@ -62,31 +52,54 @@
   // добавление обработчика на отправку формы
   userForm.addEventListener('submit', onSubmitForm);
 
-  // функция настройки обработчиков для изменения параметров персонажа
-  var changeColor = function (element, arr, input) {
-    element.addEventListener('click', function () {
-      var newColor = window.util.getRandomData(arr);
-      if (element === wizardFireball) {
-        element.style.backgroundColor = newColor;
-      } else {
-        element.style.fill = newColor;
-      }
-      input.value = newColor;
-    });
+
+  // функция присвоения рейтинга схожести каждому магу
+  var getRank = function (wizard) {
+    var rank = 0;
+    if (wizard.colorCoat === window.wizard.coatColor) {
+      rank += 2;
+    }
+    if (wizard.colorEyes === window.wizard.eyesColor) {
+      rank += 1;
+    }
+    return rank;
   };
 
-  // добавление обработчика изменения цвета мантии по клику
-  changeColor(wizardCoat, COAT_COLORS, coatColorInput);
+  // функция для сортировки имён магов по алфавиту
+  var namesComparator = function (left, right) {
+    if (left > right) {
+      return 1;
+    } else if (left < right) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
 
-  // добавление обработчика изменения цвета глаз по клику
-  changeColor(wizardEyes, EYES_COLORS, eyesColorInput);
+  // функция сортировки магов и отрисовки отсортированного списка
+  var updateWizards = function () {
 
-  // добавление обработчика изменения цвета фаерболов по клику
-  changeColor(wizardFireball, FIREBALL_COLORS, fireballColorInput);
+    var sortedWizards = wizards.slice().sort(function (left, right) {
+      var rankDiff = getRank(right) - getRank(left);
+      if (rankDiff === 0) {
+        rankDiff = namesComparator(left.name, right.name);
+      }
+      return rankDiff;
+    });
+
+    window.render.createWizards(sortedWizards);
+  };
+
+  // успешная загрузка данных: сохранение в массив и отрисовка отсортированного списка магов
+  var onSuccessLoad = function (data) {
+    wizards = data;
+    updateWizards();
+  };
+
+  // загрузка данных с сервера и обработка результата
+  window.backend.load(onSuccessLoad, onError);
 
   window.setup = {
-    onError: onError,
-    COAT_COLORS: COAT_COLORS,
-    EYES_COLORS: EYES_COLORS
+    updateWizards: updateWizards
   };
 })();
